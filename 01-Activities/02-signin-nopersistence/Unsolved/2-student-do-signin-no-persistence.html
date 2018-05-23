@@ -19,7 +19,7 @@
     <br>
 
     <!-- Jumbotron -->
-    <div class="jumbotron">
+    <div class="jumbotron" style="background-color: aquamarine">
       <h1 class="text-center">Sign-Up Today!</h1>
     </div>
 
@@ -88,12 +88,25 @@
       event.preventDefault();
 
       // Capture User Inputs and store them into variables
-
+      var name = $("#name-input").val().trim();
+      var email = $("#email-input").val().trim();
+      var age = $("#age-input").val().trim();
+      var comment = $("#comment-input").val().trim();
 
       // Console log each of the user inputs to confirm we are receiving them correctly
 
+      console.log(name);
+      console.log("Email: " + email);
+      console.log("Age: " + age);
+      console.log(comment);
 
       // Output all of the new information into the relevant HTML sections
+
+      $("#name-display").text(name);
+      $("#email-display").text("Email: " + email);
+      $("#age-display").text("Age: " + age);
+      $("#comment-display").text(comment);
+
     });
   </script>
 
