@@ -7,7 +7,8 @@
   <title>Sign-Up Today!</title>
 
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+    crossorigin="anonymous">
 
 </head>
 
@@ -72,6 +73,16 @@
 
     </div>
 
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">All Members</h3>
+        </div>
+        <div class="panel-body">
+          <div class="well"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- jQuery -->
@@ -86,12 +97,28 @@
 
     // Initialize Firebase
 
+    var config = {
+      apiKey: "AIzaSyCoyo6in4ZS92aZF67Yg_kPQlEAU-D8W24",
+      authDomain: "fir-practice-209d5.firebaseapp.com",
+      databaseURL: "https://fir-practice-209d5.firebaseio.com",
+      projectId: "fir-practice-209d5",
+      storageBucket: "fir-practice-209d5.appspot.com",
+      messagingSenderId: "726745729586"
+    };
+
+    firebase.initializeApp(config);
 
     // Create a variable to reference the database
 
+    var database = firebase.database();
+
+    var name = "";
+    var email = "";
+    var age = "";
+    var comment = "";
 
     // Capture Button Click
-    $("#add-user").on("click", function(event) {
+    $("#add-user").on("click", function (event) {
       // Don't refresh the page!
       event.preventDefault();
 
@@ -100,6 +127,36 @@
       // Code in the logic for storing and retrieving the most recent user.
 
       // Don't forget to provide initial data to your Firebase database.
+
+      name = $("#name-input").val().trim();
+      email = $("#email-input").val().trim();
+      age = $("#age-input").val().trim();
+      comment = $("#comment-input").val().trim();
+
+      database.ref().push({
+        name: name,
+        email: email,
+        age: age,
+        comment: comment,
+        dateAdded: firebase.database.ServerValue.TIMESTAMP
+      });
+
+      database.ref().on("child_added", function (snapshot) {
+        $(".well").append("<p>" + name + "</p>");
+        $(".well").append("<p>" + email + "</p>");
+        $(".well").append("<p>" + age + "</p>");
+        $(".well").append("<p>" + comment + "</p>");
+        $(".well").append("<hr>");
+      });
+
+      database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function (snapshot) {
+        $("#name-display").text(name);
+        $("#email-display").text(email);
+        $("#age-display").text(age);
+        $("#comment-display").text(comment);
+      }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      });
 
     });
 
